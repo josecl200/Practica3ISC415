@@ -10,6 +10,8 @@ public class Main {
     public static void main(String[] args){
         Spark.port(8080);
         staticFileLocation("/public");
+        Routes.rutas();
+
 
 
     }

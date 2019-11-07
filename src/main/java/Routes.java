@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Routes {
-    public void rutas(){
+    public static void rutas(){
         Spark.get("/", (request, response) -> {
             Map<String,Object> atributos = new HashMap<>();
             atributos.put("posts", PuenteArt.getInstance().cargarArticulos());
