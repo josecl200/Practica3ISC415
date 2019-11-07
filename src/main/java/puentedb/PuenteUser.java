@@ -1,7 +1,6 @@
 package puentedb;
 
 import clases.Usuario;
-import sun.net.ftp.FtpDirEntry;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -61,7 +60,7 @@ public class PuenteUser {
             PreparedStatement preparedStatement = con.prepareStatement(query);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                Usuario user = getUser(rs.getLong("id"));
+                Usuario user = getUser(rs.getString("username"));
                 users.add(user);
             }
         } catch (SQLException ex) {
@@ -79,9 +78,7 @@ public class PuenteUser {
 
     public Usuario getUser(String username) {
         Usuario user = null;
-
         Connection con = null;
-
         try {
             String query = "select * from usuario where username = ?";
             con = PuenteDB.getInstance().getConnection();
@@ -89,6 +86,41 @@ public class PuenteUser {
             PreparedStatement preparedStatement = con.prepareStatement(query);
 
             preparedStatement.setString(1, username);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                user = new Usuario();
+                user.setId(rs.getLong("id"));
+                user.setUsername(rs.getString("username"));
+                user.setNombre(rs.getString("nombre"));
+                user.setPassword(rs.getString("password"));
+                user.setAdmin(rs.getBoolean("admin"));
+                user.setAutor(rs.getBoolean("autor"));
+            }
+
+        } catch (SQLException ex) {
+
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+
+            }
+        }
+        return user;
+    }
+
+    public Usuario getUser(Long id) {
+        Usuario user = null;
+        Connection con = null;
+        try {
+            String query = "select * from usuario where id = ?";
+            con = PuenteDB.getInstance().getConnection();
+
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+
+            preparedStatement.setLong(1, id);
 
             ResultSet rs = preparedStatement.executeQuery();
 

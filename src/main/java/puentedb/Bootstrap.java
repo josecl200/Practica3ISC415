@@ -1,9 +1,9 @@
 package puentedb;
 
-import java.sql.Connection;
-
 import clases.Usuario;
 import org.h2.tools.Server;
+
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -68,7 +68,7 @@ public class Bootstrap{
         statement.execute(EtiqArtDB);
         statement.close();
 
-        PuenteUser.getInstance().crearUsuario(new Usuario("root","admin","toor",true,true));
+        PuenteUser.getInstance().crearUsuario(new Usuario(0,"root","admin","toor",true,true));
 
         con.close();
         System.out.println("Tables created!!");

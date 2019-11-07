@@ -66,7 +66,7 @@ public class PuenteArt {
                 art.setId(rs.getLong("id"));
                 art.setTitulo(rs.getString("titulo"));
                 art.setCuerpo(rs.getString("cuerpo"));
-                art.setFecha(rs.getTimestamp("fecha_publicacion"));
+                art.setFecha(rs.getDate("fecha_publicacion"));
 
                 Usuario autor = PuenteUser.getInstance().getUser(rs.getLong("id"));
                 art.setAutor(autor);
@@ -99,7 +99,7 @@ public class PuenteArt {
             preparedStatement.setString(2, article.getTitulo());
             preparedStatement.setString(3, article.getCuerpo());
             preparedStatement.setLong(4, article.getAutor().getId());
-            preparedStatement.setTimestamp(5, article.getFecha());
+            preparedStatement.setDate(5, article.getFecha());
 
             int row = preparedStatement.executeUpdate();
             if (row>0){

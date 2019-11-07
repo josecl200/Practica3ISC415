@@ -8,7 +8,7 @@ public class Filter {
         Spark.before((request, response) -> {
             Usuario user = request.session().attribute("usuario");
             if(request.cookie("USER") != null && user == null){ //If the user is not logged, try to get the cookie to set a session
-                long userUID = request.cookie("USER");
+                long userUID = Long.parseLong(request.cookie("USER"));
                 user = PuenteUser.getInstance().getUser(userUID);
                 Session session = request.session(true);
                 session.attribute("usuario", user);

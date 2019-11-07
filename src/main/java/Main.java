@@ -1,9 +1,5 @@
 import spark.Spark;
-import spark.Spark.*;
 
-import java.sql.SQLException;
-
-import static spark.Spark.get;
 import static spark.Spark.staticFileLocation;
 
 public class Main {
@@ -11,8 +7,5 @@ public class Main {
         Spark.port(8080);
         staticFileLocation("/public");
         Routes.rutas();
-
-
-
     }
 }

@@ -2,7 +2,6 @@ import clases.Articulo;
 import clases.Etiqueta;
 import clases.Usuario;
 import puentedb.PuenteArt;
-import puentedb.PuenteEtiqueta;
 import puentedb.PuenteUser;
 import spark.ModelAndView;
 import spark.Session;
@@ -42,7 +41,7 @@ public class Routes {
 
                 Etiqueta etiq = new Etiqueta(0,tag.trim());
             }
-            Articulo art = new Articulo(0,request.queryParams("titulo"), request.queryParams("cuerpo"), PuenteUser.getInstance().getUser(request.session(true).attribute("id_usuario")), new Date(new java.util.Date().getTime()), etiquetas);
+            Articulo art = new Articulo(0,request.queryParams("titulo"), request.queryParams("cuerpo"), PuenteUser.getInstance().getUser(Long.parseLong(request.session(true).attribute("id_usuario"))), new Date(new java.util.Date().getTime()), etiquetas);
             long id = PuenteArt.getInstance().createArticulo(art);
             response.redirect("/articulo"+ id);
             return null;
