@@ -14,7 +14,7 @@ public class Bootstrap{
     }
 
     public static void stopDb() throws SQLException {
-        Server.shutdownTcpServer("tcp://localhost:9092", "", true, true);
+        Server.shutdownTcpServer("tcp://localhost:9092", "contracts", true, true);
     }
 
     public static void createTables() throws SQLException {

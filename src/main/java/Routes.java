@@ -26,7 +26,7 @@ public class Routes {
             Map<String,Object> atributos = new HashMap<>();
             atributos.put("articulo", PuenteArt.getInstance().getArticulo(Long.parseLong(request.params("idArt"))));
             atributos.put("usuario", request.session(true).attribute("usuario"));
-            return new FreeMarkerEngine().render(new ModelAndView(atributos,"posts.fml"));
+            return new FreeMarkerEngine().render(new ModelAndView(atributos,"post.fml"));
         });
 
         Spark.get("/crearArticulo", (request, response) -> {
