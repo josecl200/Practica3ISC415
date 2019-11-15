@@ -25,7 +25,7 @@ public class PuenteArt {
         ArrayList<Articulo> arts = new ArrayList<>();
         Connection con=null;
         try{
-            String query = "SELECT * FROM Articulos ORDER BY fecha_publicacion"; //TODO: revisar con modelo
+            String query = "SELECT * FROM Articulo ORDER BY fecha"; //TODO: revisar con modelo
             con = PuenteDB.getInstance().getConnection();
             PreparedStatement execQuery = con.prepareCall(query);
             ResultSet articuloRes = execQuery.executeQuery();
@@ -91,7 +91,7 @@ public class PuenteArt {
         long id = -1;
         Connection con = null;
         try {
-            String query = "insert into articles(uid,title,body,author_id,article_date) values(?,?,?,?,?)";
+            String query = "insert into articulo(uid,title,body,author_id,article_date) values(?,?,?,?,?)";
             con = PuenteDB.getInstance().getConnection();
             long uniqueID = UUID.randomUUID().getLeastSignificantBits();
             PreparedStatement preparedStatement = con.prepareStatement(query);

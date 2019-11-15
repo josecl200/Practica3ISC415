@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class PuenteDB {
     private static PuenteDB instance;
-    private String URL = "jdbc:h2:tcp://localhost/~/spark-jdbc";
+    private String URL = "jdbc:h2:tcp://localhost/~/JDBC-T";
 
     private PuenteDB() {
         registerDriver();
@@ -30,9 +30,9 @@ public class PuenteDB {
     public Connection getConnection() {
         Connection con = null;
         try {
-            con = DriverManager.getConnection(URL, "sa", "");
+            con = DriverManager.getConnection(URL, "sa", "contracts");
         } catch (SQLException ex) {
-
+            ex.printStackTrace();
         }
         return con;
     }

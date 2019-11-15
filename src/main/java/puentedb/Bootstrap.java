@@ -10,11 +10,11 @@ import java.sql.Statement;
 public class Bootstrap{
 
     public static void startDb() throws SQLException {
-        Server.createTcpServer("-tcpPort", "9092", "-tcpAllowOthers").start();
+        Server.createTcpServer("-tcpPort", "9094", "-tcpAllowOthers").start();
     }
 
     public static void stopDb() throws SQLException {
-        Server.shutdownTcpServer("tcp://localhost:9092", "contracts", true, true);
+        Server.shutdownTcpServer("tcp://localhost:9094", "contracts", true, true);
     }
 
     public static void createTables() throws SQLException {
@@ -40,15 +40,15 @@ public class Bootstrap{
                 "ID BIGINT PRIMARY KEY NOT NULL," +
                 "TITULO VARCHAR(30) NOT NULL," +
                 "CUERPO VARCHAR2 NOT NULL," +
-                "AUTOR OBJECT," +
+                "AUTOR BIGINT NOT NULL REFERENCES USUARIO(ID)," +
                 "FECHA DATE," +
                 ");";
         String ComentarioDB = "CREATE TABLE IF NOT EXISTS COMENTARIO" +
                 "(" +
                 "ID BIGINT PRIMARY KEY NOT NULL," +
                 "COMENTARIO VARCHAR2 NOT NULL," +
-                "AUTOR OBJECT," +
-                "ARTICULO OBJECT" +
+                "AUTOR BIGINT NOT NULL REFERENCES USUARIO(ID)," +
+                "ARTICULO BIGINT NOT NULL REFERENCES ARTICULO(ID)" +
                 ");";
 
         String EtiqArtDB = "CREATE TABLE IF NOT EXISTS ARTETIQUETA" +
@@ -68,10 +68,14 @@ public class Bootstrap{
         statement.execute(EtiqArtDB);
         statement.close();
 
-        PuenteUser.getInstance().crearUsuario(new Usuario(0,"root","admin","toor",true,true));
+        if(PuenteUser.getInstance().crearUsuario(new Usuario(0,"root","admin","toor",true,true))){
+            System.out.println("Tables created!!");
+        }else{
+            System.out.println("DB ERROR");
+        }
+
 
         con.close();
-        System.out.println("Tables created!!");
     }
 }
 
