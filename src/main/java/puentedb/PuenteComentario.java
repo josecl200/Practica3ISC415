@@ -2,12 +2,14 @@ package puentedb;
 
 import clases.Articulo;
 import clases.Comentario;
+import clases.Etiqueta;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class PuenteComentario {
     private static PuenteComentario instance;
@@ -72,5 +74,32 @@ public class PuenteComentario {
             }
         }
         return com;
+    }
+
+    public boolean deleteComentario(long id_comentario) {
+        boolean ok=false;
+        Connection con = null;
+        try {
+            String query = "DELETE FROM COMENTARIO WHERE ID = ?";
+            con = PuenteDB.getInstance().getConnection();
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setLong(1, id_comentario);
+
+
+            int row = preparedStatement.executeUpdate();
+            if (row>0)
+                ok=true;
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return ok;
     }
 }

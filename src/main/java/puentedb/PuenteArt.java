@@ -3,7 +3,6 @@ package puentedb;
 import clases.Articulo;
 import clases.Etiqueta;
 import clases.Usuario;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -135,5 +134,76 @@ public class PuenteArt {
         return id;
     }
 
+    public boolean modifyArticulo(Articulo article) {
+        boolean ok = false;
+        Connection con = null;
+        try {
+            String query = "UPDATE articulo SET (title,body,author_id,article_date) values(?,?,?,?) WHERE ID = ?";
+            con = PuenteDB.getInstance().getConnection();
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setLong(5, article.getId());
+            preparedStatement.setString(1, article.getTitulo());
+            preparedStatement.setString(2, article.getCuerpo());
+            preparedStatement.setLong(3, article.getAutor().getId());
+            preparedStatement.setDate(4, article.getFecha());
+
+            int row = preparedStatement.executeUpdate() ;
+            if(row>0)
+                ok=true;
+
+            ArrayList<Etiqueta> etiquetasUsadas = PuenteEtiqueta.getInstance().cargarEtiquetas();
+            for (Etiqueta tag : article.getListaEtiquetas()) {
+                if(PuenteEtiqueta.getInstance().getEtiqueta(tag.getEtiqueta())==null){
+                    long idEt = PuenteEtiqueta.getInstance().crearEtiqueta(tag);
+                    tag.setId(idEt);
+                }else{
+                    Etiqueta et = PuenteEtiqueta.getInstance().getEtiqueta(tag.getEtiqueta());
+                    tag.setId(et.getId());
+                }
+            }
+
+            for (Etiqueta tag : article.getListaEtiquetas()) {
+                PuenteArtEtiqueta.getInstance().crearEtiquetasArt(article.getId(), PuenteEtiqueta.getInstance().getEtiqueta(tag.getEtiqueta()).getId());
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return ok;
+    }
+
+    public boolean deleteArticulo(long id_art) {
+        boolean ok=false;
+        Connection con = null;
+        try {
+            String query = "DELETE FROM ARTICULO WHERE ID = ?";
+            con = PuenteDB.getInstance().getConnection();
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setLong(1, id_art);
+
+
+            int row = preparedStatement.executeUpdate();
+            if (row>0)
+                ok=true;
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return ok;
+    }
 
 }

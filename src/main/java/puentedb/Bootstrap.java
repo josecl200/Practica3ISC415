@@ -48,7 +48,7 @@ public class Bootstrap{
                 "ID BIGINT PRIMARY KEY NOT NULL," +
                 "COMENTARIO VARCHAR2 NOT NULL," +
                 "AUTOR BIGINT NOT NULL REFERENCES USUARIO(ID)," +
-                "ARTICULO BIGINT NOT NULL REFERENCES ARTICULO(ID)" +
+                "ARTICULO BIGINT NOT NULL REFERENCES ARTICULO(ID)," +
                 "FECHA DATE NOT NULL"+
                 ");";
 
