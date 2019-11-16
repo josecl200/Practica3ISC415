@@ -88,7 +88,7 @@
 			<div id="crear" class="crear-articulo">
 				<h3 id="title" class="title">Crear publicacion
 				</h3>
-				<form action="#" method="post" id="commentform" class="comment-form" novalidate>
+				<form action="/crearArticulo" method="post" id="commentform" class="comment-form" novalidate>
 
 					<p class="comment-notes">
 						Entradas requeridas se marcan con
@@ -103,8 +103,8 @@
 					</p>
 
 					<p class="comment-form-comment">
-						<label for="comment">Contenido</label>
-						<textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required="required"></textarea>
+						<label for="cuerpo">Contenido</label>
+						<textarea id="cuerpo" name="cuerpo" cols="45" rows="8" maxlength="65525" required="required"></textarea>
 					</p>
 
 					<p class="comment-form-author">
