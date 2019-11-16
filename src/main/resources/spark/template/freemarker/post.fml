@@ -126,10 +126,24 @@
 
           <div class="reply">
             <a rel='nofollow' class='comment-reply-link' href='#' data-commentid="1" data-postid="1"
-               data-belowelement="div-comment-1" data-respondelement="respond" aria-label='Reply to A WordPress Commenter'>
+               data-belowelement="div-comment-1" data-respondelement="respond" aria-label='Reply to this Commenter'>
               <svg class="icon icon-mail-reply" aria-hidden="true" role="img">
-                <use href="#icon-mail-reply" xlink:href="#icon-mail-reply"></use> </svg>Reesponder</a></div>
+                <use href="#icon-mail-reply" xlink:href="#icon-mail-reply"></use>
+              </svg>Reesponder</a>
+          </div>
 
+
+            <div id="delete">
+                <#if usuario??>
+            <p class="form-delete">
+                    <form name="delete" id="delete" method="POST" action="/delete" style="all:unset;">
+                        <a class=form-delete" onclick="document.getElementById('delete').submit();">Borrar comentrio</a>
+                    </form>
+            </p>
+                <#else>
+                    <!--delete bug!-->
+                </#if>
+            </div>
 
         </article>
 
