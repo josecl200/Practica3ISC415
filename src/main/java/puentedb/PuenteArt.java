@@ -61,17 +61,18 @@ public class PuenteArt {
 
             ResultSet rs = preparedStatement.executeQuery();
 
-            while (rs.next()) {
+            if (rs.next()) {
                 art = new Articulo();
                 art.setId(rs.getLong("id"));
                 art.setTitulo(rs.getString("titulo"));
                 art.setCuerpo(rs.getString("cuerpo"));
-                art.setFecha(rs.getDate("fecha_publicacion"));
+                art.setFecha(rs.getDate("fecha"));
 
-                Usuario autor = PuenteUser.getInstance().getUser(rs.getLong("id"));
+
+                Usuario autor = PuenteUser.getInstance().getUser(rs.getLong("autor"));
                 art.setAutor(autor);
 
-                art.setListaComentarios(new ArrayList<>());
+                art.setListaComentarios(PuenteComentario.getInstance().cargarComentarios(art.getId()));
 
                 art.setListaEtiquetas(PuenteArtEtiqueta.getInstance().getEtiquetasArt(art.getId()));
             }

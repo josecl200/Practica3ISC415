@@ -41,7 +41,7 @@ public class Bootstrap{
                 "TITULO VARCHAR(30) NOT NULL," +
                 "CUERPO VARCHAR2 NOT NULL," +
                 "AUTOR BIGINT NOT NULL REFERENCES USUARIO(ID)," +
-                "FECHA DATE," +
+                "FECHA DATE NOT NULL" +
                 ");";
         String ComentarioDB = "CREATE TABLE IF NOT EXISTS COMENTARIO" +
                 "(" +
@@ -49,6 +49,7 @@ public class Bootstrap{
                 "COMENTARIO VARCHAR2 NOT NULL," +
                 "AUTOR BIGINT NOT NULL REFERENCES USUARIO(ID)," +
                 "ARTICULO BIGINT NOT NULL REFERENCES ARTICULO(ID)" +
+                "FECHA DATE NOT NULL"+
                 ");";
 
         String EtiqArtDB = "CREATE TABLE IF NOT EXISTS ARTETIQUETA" +

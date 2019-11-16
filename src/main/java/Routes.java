@@ -17,7 +17,7 @@ public class Routes {
     public static void rutas(){
         Spark.get("/", (request, response) -> {
             Map<String,Object> atributos = new HashMap<>();
-            System.out.println(PuenteArt.getInstance().cargarArticulos().get(0).getTitulo());
+            System.out.println(PuenteArt.getInstance().cargarArticulos().get(0).getAutor().getId());
             atributos.put("posts", PuenteArt.getInstance().cargarArticulos());
             atributos.put("usuario", request.session(true).attribute("usuario"));
             return new FreeMarkerEngine().render(new ModelAndView(atributos,"index.fml"));
@@ -32,7 +32,7 @@ public class Routes {
 
         Spark.get("/crearArticulo", (request, response) -> {
             Map<String,Object> atributos = new HashMap<>();
-            return new FreeMarkerEngine().render(new ModelAndView(atributos,"createPost.fml"));
+            return new FreeMarkerEngine().render(new ModelAndView(atributos,"create.fml"));
         });
 
         Spark.post("/crearArticulo", ((request, response) -> {
@@ -50,6 +50,13 @@ public class Routes {
 
         Spark.get("/login", (request, response) -> {
             return new FreeMarkerEngine().render(new ModelAndView(null,"login.fml"));
+        });
+
+        Spark.post("/logout", (request, response) -> {
+            Session session = request.session(true);
+            session.invalidate();
+            response.redirect("/");
+            return null;
         });
 
         Spark.post("/login",(request, response) -> {
@@ -80,8 +87,8 @@ public class Routes {
         });
 
         Spark.post("/register", (request, response) -> {
-            String username = request.queryParams("username");
-            String password = request.queryParams("password");
+            String username = request.queryParams("usuario");
+            String password = request.queryParams("contrasena");
             String nombre   = request.queryParams("nombre");
             boolean admin = false;
             boolean autor = request.queryParams("autor") != null;
