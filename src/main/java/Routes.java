@@ -32,6 +32,7 @@ public class Routes {
 
         Spark.get("/crearArticulo", (request, response) -> {
             Map<String,Object> atributos = new HashMap<>();
+            atributos.put("usuario", request.session(true).attribute("usuario"));
             return new FreeMarkerEngine().render(new ModelAndView(atributos,"create.fml"));
         });
 
@@ -55,6 +56,7 @@ public class Routes {
         Spark.post("/logout", (request, response) -> {
             Session session = request.session(true);
             session.invalidate();
+            response.removeCookie("USER");
             response.redirect("/");
             return null;
         });

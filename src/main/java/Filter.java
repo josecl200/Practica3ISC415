@@ -15,11 +15,11 @@ public class Filter {
             }
         });
 
-        Spark.before("/crearArticulo", (request, response) -> {
+        /*Spark.before("/crearArticulo", (request, response) -> {
             Usuario user = request.session().attribute("usuario");
             if(user == null || !user.isAutor()){
-                Spark.halt(403);
+                response.redirect("/login");
             }
-        });
+        });*/
     }
 }
