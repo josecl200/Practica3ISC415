@@ -38,15 +38,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Inicio</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/about">Acerca de</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/crearArticulo">Crear articulo</a>
-                </li>
                 <#if usuario??>
                     <li class="nav-item">
                         <a class="nav-link">Bienvenido ${usuario.nombre}</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/crearArticulo">Crear articulo</a>
                     </li>
 
                     <li class="nav-item">
@@ -80,7 +78,7 @@
 </header>
 
 
-<div class="form-control">
+<div class="form-group">
 	<div id="primary" class="content-area">
 		<main id="main" class="site-main" role="main">
 
@@ -121,7 +119,7 @@
 					</p>
 
 					<p class="form-submit">
-						<input name="submit" type="submit" id="submit" class="submit" value="Post Comment" />
+						<input name="submit" type="submit" id="submit" class="submit" value="Publicar" />
 						<input type='hidden' name='comment_post_ID' value='1' id='comment_post_ID' />
 						<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
 					</p>
@@ -133,15 +131,27 @@
 
 		</main><!-- #main -->
 	</div><!-- #primary -->
-	
 
 </div><!-- .wrap -->
 
-
 		</div><!-- #content -->
 
-		<footer id="colophon" class="site-footer" role="contentinfo">
-			<div class="wrap">
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <ul class="list-inline text-center">
+                    <li class="list-inline-item">
+
+                    </li>
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; JJ-El avionsito 2019</p>
+            </div>
+        </div>
+    </div>
+</footer>
                 
 </body>
 
