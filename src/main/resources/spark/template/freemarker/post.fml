@@ -20,6 +20,7 @@
 
   <!-- Custom styles for this template -->
   <link href="/css/clean-blog.min.css" rel="stylesheet">
+  <link href="/css/scoped.css" rel="stylesheet">
 
 </head>
 
@@ -95,7 +96,7 @@
   </article>
 
 
-  <div id="comments" class="fa-comment">
+  <div id="comments" class="content">
 
     <h2 class="comments-title">Respuestas a &ldquo;${articulo.titulo}&rdquo;	</h2>
     <ol class="comment-list">
@@ -127,12 +128,19 @@
                   <div class="interaction">
                       <div id="delete">
                           <#if usuario??>
-                              <#if usuario.isAdmin()??>
+                              <#if usuario.isAdmin()?? || (usuario.isAuthor() && usuario.id == articulo.autor.id)>
                                   <p class="form-delete">
                                   <form name="delete" id="delete" method="POST" action="/deleteComentario/${artCom.id}" style="all:unset;">
                                       <a class=form-delete" onclick="document.getElementById('delete').submit();">Borrar comentario</a>
                                   </form>
                                   </p>
+
+                                  <p class="form-update">
+                                  <form name="update" id="update" method="POST" action="/updateComentario/${artCom.id}" style="all:unset;">
+                                      <a class=form-update" onclick="document.getElementById('update').submit();">Editar comentario</a>
+                                  </form>
+                                  </p>
+
                               <#else>
                                   <!--delete bug!-->
                               </#if>
@@ -153,36 +161,51 @@
 
 
     <#if usuario??>
-        <div id="respond" class="fa-comment">
-            <h3 id="reply-title" class="comment-reply-title">Deja un comentario
-            </h3>
-            <form action="/postearComentario" method="post" id="commentform" class="comment-form" novalidate>
+        <div id="respond" class="content">
+            <h2 id="reply-title" class="comment-reply-title">Deja un comentario
+            </h2>
+            <form action="/postearComentario" method="post" id="commentform" class="cf" >
 
                 <p class="comment-notes">
                     Entradas requeridas se marcan con
                     <span class="required">*</span>
                 </p>
 
-                <p class="comment-form-comment">
+                <div class="half right cf">
                     <label for="comment">Comentario</label>
-                    <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required="required"></textarea>
-                </p>
+                    <textarea id="comment" name="comment" maxlength="65525" required="required"></textarea>
+                </div>
 
-                <p class="comment-form-author">
+                <div class="half left cf">
                     <label for="author">Nombre: ${usuario.nombre}
                         <span class="required">*</span>
                     </label>
-                </p>
+                </div>
 
-                <p class="form-submit">
+                <div class="comment-publish">
                     <input type='hidden' name='articuloId' value='${articulo.id?string["0"]}' id='articuloId' />
-                    <input name="submit" type="submit" id="submit" class="submit" value="Publicar comentario" />
+                    <input name="submit" type="submit" id="input-submit" class="submit" value="Publicar comentario" />
                     <input type='hidden' name='comment_parent' id='comment_parent' value='0' />
-                </p>
+                </div>
             </form>
 
         </div>
     </#if>
+
+      <!--
+      <h1>Elegant Contact Form</h1>
+      <form class="cf">
+          <div class="half left cf">
+              <input type="text" id="input-name" placeholder="Name">
+              <input type="email" id="input-email" placeholder="Email address">
+              <input type="text" id="input-subject" placeholder="Subject">
+          </div>
+          <div class="half right cf">
+              <textarea name="message" type="text" id="input-message" placeholder="Message"></textarea>
+          </div>
+          <input type="submit" value="Submit" id="input-submit">
+      </form>
+      -->
 
     <!-- #respond -->
 
