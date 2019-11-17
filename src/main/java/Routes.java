@@ -4,6 +4,7 @@ import clases.Etiqueta;
 import clases.Usuario;
 import puentedb.PuenteArt;
 import puentedb.PuenteComentario;
+import puentedb.PuenteEtiqueta;
 import puentedb.PuenteUser;
 import spark.ModelAndView;
 import spark.Session;
@@ -39,15 +40,54 @@ public class Routes {
             return new FreeMarkerEngine().render(new ModelAndView(atributos,"create.fml"));
         });
 
-        Spark.post("/crearArticulo", ((request, response) -> {
+        Spark.get("/modArticulo/:idArt", (request, response) -> {
+            Map<String,Object> atributos = new HashMap<>();
+            Articulo toMod = PuenteArt.getInstance().getArticulo(Long.parseLong(request.params("idArt")));
+            atributos.put("titulo", toMod.getTitulo());
+            atributos.put("cuerpo", toMod.getCuerpo());
+            atributos.put("idMod", toMod.getId());
+            atributos.put("usuario", request.session().attribute("usuario"));
+            return new FreeMarkerEngine().render(new ModelAndView(atributos,"create.fml"));
+        });
+
+        Spark.post("/modArticulo/:idArt", ((request, response) -> {
             String[] tags = request.queryParams("tags").split(",");
+            System.out.println(request.queryParams("tags"));
             System.out.println(tags);
             System.out.println(request.queryParams());
             ArrayList<Etiqueta> etiquetas = new ArrayList<>();
             for (String tag: tags) {
-                Etiqueta etiq = new Etiqueta(0,tag.trim());
+                if(PuenteEtiqueta.getInstance().getEtiqueta(tag)!=null){
+                    etiquetas.add(PuenteEtiqueta.getInstance().getEtiqueta(tag));
+                }else{
+                    PuenteEtiqueta.getInstance().crearEtiqueta(new Etiqueta(0,tag));
+                }
             }
-            Articulo art = new Articulo(0,request.queryParams("titulo"), request.queryParams("cuerpo"), request.session(true).attribute("usuario"), LocalDateTime.now(), etiquetas);
+            Articulo art = new Articulo(Long.parseLong(request.params("idArt")),request.queryParams("titulo"), request.queryParams("cuerpo"), request.session(true).attribute("usuario"), LocalDateTime.now(), etiquetas);
+            PuenteArt.getInstance().modifyArticulo(art);
+            response.redirect("/articulo/"+ request.params("idArt"));
+            return null;
+        }));
+
+        Spark.post("/crearArticulo", ((request, response) -> {
+
+            String[] tags = request.queryParams("tags").split(",");
+            System.out.println(request.queryParams("tags"));
+            System.out.println(tags);
+            System.out.println(request.queryParams());
+            ArrayList<Etiqueta> etiquetas = new ArrayList<>();
+            for (String tag: tags) {
+               if(PuenteEtiqueta.getInstance().getEtiqueta(tag)!=null){
+                   etiquetas.add(PuenteEtiqueta.getInstance().getEtiqueta(tag));
+               }else{
+                   long newEt = PuenteEtiqueta.getInstance().crearEtiqueta(new Etiqueta(0,tag));
+
+                   etiquetas.add(PuenteEtiqueta.getInstance().getEtiqueta(newEt));
+               }
+            }
+
+            etiquetas.forEach(part -> System.out.println(part.getEtiqueta()));
+            Articulo art = new Articulo(0,request.queryParams("titulo"), request.queryParams("cuerpo"), request.session().attribute("usuario"), LocalDateTime.now(), etiquetas);
             long id = PuenteArt.getInstance().createArticulo(art);
             response.redirect("/articulo/"+ id);
             return null;

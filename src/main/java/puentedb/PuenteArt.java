@@ -103,20 +103,10 @@ public class PuenteArt {
             if (row>0)
                 id = uniqueID;
 
-            ArrayList<Etiqueta> etiquetasUsadas = PuenteEtiqueta.getInstance().cargarEtiquetas();
             for (Etiqueta tag : article.getListaEtiquetas()) {
-                if(PuenteEtiqueta.getInstance().getEtiqueta(tag.getEtiqueta())==null){
-                    long idEt = PuenteEtiqueta.getInstance().crearEtiqueta(tag);
-                    tag.setId(idEt);
-                }else{
-                    Etiqueta et = PuenteEtiqueta.getInstance().getEtiqueta(tag.getEtiqueta());
-                    tag.setId(et.getId());
-                }
+                PuenteArtEtiqueta.getInstance().crearEtiquetasArt(uniqueID, tag.getId());
             }
 
-            for (Etiqueta tag : article.getListaEtiquetas()) {
-                PuenteArtEtiqueta.getInstance().crearEtiquetasArt(uniqueID, PuenteEtiqueta.getInstance().getEtiqueta(tag.getEtiqueta()).getId());
-            }
 
         } catch (SQLException e) {
             e.printStackTrace();
