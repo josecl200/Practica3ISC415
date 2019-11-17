@@ -97,99 +97,92 @@
 
   <div id="comments" class="fa-comment">
 
-    <h2 class="comments-title"> One Reply to &ldquo;${articulo.titulo}&rdquo;	</h2>
-
+    <h2 class="comments-title">Respuestas a &ldquo;${articulo.titulo}&rdquo;	</h2>
     <ol class="comment-list">
-      <li id="comment-1" class="comment even thread-even depth-1">
-        <article id="div-comment-1" class="comment-body">
-          <footer class="comment-meta">
+      <#list articulo.listaComentarios as artCom>
+          <li id="comment-${artCom.id}" class="comment even thread-even depth-1">
+              <article id="div-comment-1" class="comment-body">
+                  <footer class="comment-meta">
+                      <div class="comment-author vcard">
+                          <b class="fn">
+                              <a href='#' rel='external nofollow' class='url'>${artCom.autor.nombre}</a>
+                          </b>
+                          <span class="says">dice:</span>
+                      </div>
+                      <!-- .comment-author -->
+                      <div class="comment-metadata">
+                          <a href="#">
+                              <time datetime="">
+                                  ${artCom.fecha}
+                              </time>
+                          </a>
+                      </div>
+                      <div class="comment-content">
+                          <p>${artCom.comentario}<br /></p>
+                      </div>
+                      <!-- .comment-content -->
+                      <!-- .comment-metadata -->
+                  </footer>
+                  <!-- .comment-meta -->
+                  <div class="interaction">
+                      <div id="delete">
+                          <#if usuario??>
+                              <#if usuario.isAdmin()??>
+                                  <p class="form-delete">
+                                  <form name="delete" id="delete" method="POST" action="/deleteComentario/${artCom.id}" style="all:unset;">
+                                      <a class=form-delete" onclick="document.getElementById('delete').submit();">Borrar comentario</a>
+                                  </form>
+                                  </p>
+                              <#else>
+                                  <!--delete bug!-->
+                              </#if>
+                          </#if>
+                      </div>
+                  </div>
+              </article>
 
-            <div class="comment-author vcard">
+              <!-- .comment-body -->
 
-             <b class="fn">
-                <a href='#' rel='external nofollow' class='url'>Elver Galarga</a>
-              </b>
-              <span class="says">dice:</span>
-            </div>
-            <!-- .comment-author -->
+          </li>
 
-            <div class="comment-metadata">
-              <a href="#">
-                <time datetime="">
-                 6/6/6
-                </time>
-              </a>
-            </div>
-
-            <div class="comment-content">
-              <p>bruh<br /></p>
-            </div>
-            <!-- .comment-content -->
-
-
-            <!-- .comment-metadata -->
-          </footer>
-
-
-          <!-- .comment-meta -->
-          <div class="interaction">
-            <a rel='nofollow' class='comment-reply-link' href='#' data-commentid="1" data-postid="1"
-               data-respondelement="respond" aria-label='Reply to this Commenter'> Reesponder</a>
-
-              <div id="delete">
-                  <#if usuario??>
-              <p class="form-delete">
-                    <form name="delete" id="delete" method="POST" action="/delete" style="all:unset;">
-                        <a class=form-delete" onclick="document.getElementById('delete').submit();">Borrar comentrio</a>
-                    </form>
-              </p>
-                <#else>
-                    <!--delete bug!-->
-                </#if>
-              </div>
-          </div>
-
-        </article>
-
-        <!-- .comment-body -->
-
-      </li>
-
+      </#list>
       <!-- #comment-## -->
 
     </ol>
 
 
 
-    <div id="respond" class="fa-comment">
-      <h3 id="reply-title" class="comment-reply-title">Deja un comentario
-      </h3>
-      <form action="#" method="post" id="commentform" class="comment-form" novalidate>
+    <#if usuario??>
+        <div id="respond" class="fa-comment">
+            <h3 id="reply-title" class="comment-reply-title">Deja un comentario
+            </h3>
+            <form action="/postearComentario" method="post" id="commentform" class="comment-form" novalidate>
 
-        <p class="comment-notes">
-                        Entradas requeridas se marcan con
-          <span class="required">*</span>
-        </p>
+                <p class="comment-notes">
+                    Entradas requeridas se marcan con
+                    <span class="required">*</span>
+                </p>
 
-        <p class="comment-form-comment">
-          <label for="comment">Comentario</label>
-          <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required="required"></textarea>
-        </p>
+                <p class="comment-form-comment">
+                    <label for="comment">Comentario</label>
+                    <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required="required"></textarea>
+                </p>
 
-        <p class="comment-form-author">
-          <label for="author">Nombre: bruh
-            <span class="required">*</span>
-          </label>
-        </p>
+                <p class="comment-form-author">
+                    <label for="author">Nombre: ${usuario.nombre}
+                        <span class="required">*</span>
+                    </label>
+                </p>
 
-        <p class="form-submit">
-          <input name="submit" type="submit" id="submit" class="submit" value="Publicar comentario" />
-          <input type='hidden' name='comment_post_ID' value='1' id='comment_post_ID' />
-          <input type='hidden' name='comment_parent' id='comment_parent' value='0' />
-        </p>
-      </form>
+                <p class="form-submit">
+                    <input type='hidden' name='articuloId' value='${articulo.id?string["0"]}' id='articuloId' />
+                    <input name="submit" type="submit" id="submit" class="submit" value="Publicar comentario" />
+                    <input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+                </p>
+            </form>
 
-    </div>
+        </div>
+    </#if>
 
     <!-- #respond -->
 

@@ -3,10 +3,8 @@ package puentedb;
 import clases.Articulo;
 import clases.Etiqueta;
 import clases.Usuario;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -24,7 +22,7 @@ public class PuenteArt {
         ArrayList<Articulo> arts = new ArrayList<>();
         Connection con=null;
         try{
-            String query = "SELECT * FROM Articulo ORDER BY fecha"; //TODO: revisar con modelo
+            String query = "SELECT * FROM Articulo ORDER BY FECHA DESC ";
             con = PuenteDB.getInstance().getConnection();
             PreparedStatement execQuery = con.prepareCall(query);
             ResultSet articuloRes = execQuery.executeQuery();
@@ -65,15 +63,15 @@ public class PuenteArt {
                 art.setId(rs.getLong("id"));
                 art.setTitulo(rs.getString("titulo"));
                 art.setCuerpo(rs.getString("cuerpo"));
-                art.setFecha(rs.getDate("fecha"));
+                art.setFecha(rs.getTimestamp("fecha").toLocalDateTime());
 
 
                 Usuario autor = PuenteUser.getInstance().getUser(rs.getLong("autor"));
                 art.setAutor(autor);
 
-                art.setListaComentarios(PuenteComentario.getInstance().cargarComentarios(art.getId()));
+                art.setListaComentarios(PuenteComentario.getInstance().cargarComentarios(id));
 
-                art.setListaEtiquetas(PuenteArtEtiqueta.getInstance().getEtiquetasArt(art.getId()));
+                art.setListaEtiquetas(PuenteArtEtiqueta.getInstance().getEtiquetasArt(id));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -91,7 +89,7 @@ public class PuenteArt {
         long id = -1;
         Connection con = null;
         try {
-            String query = "insert into articulo(uid,title,body,author_id,article_date) values(?,?,?,?,?)";
+            String query = "insert into articulo values(?,?,?,?,?)";
             con = PuenteDB.getInstance().getConnection();
             long uniqueID = UUID.randomUUID().getLeastSignificantBits();
             PreparedStatement preparedStatement = con.prepareStatement(query);
@@ -99,12 +97,11 @@ public class PuenteArt {
             preparedStatement.setString(2, article.getTitulo());
             preparedStatement.setString(3, article.getCuerpo());
             preparedStatement.setLong(4, article.getAutor().getId());
-            preparedStatement.setDate(5, article.getFecha());
+            preparedStatement.setTimestamp(5, Timestamp.valueOf(article.getFecha()));
 
             int row = preparedStatement.executeUpdate();
-            if (row>0){
+            if (row>0)
                 id = uniqueID;
-            }
 
             ArrayList<Etiqueta> etiquetasUsadas = PuenteEtiqueta.getInstance().cargarEtiquetas();
             for (Etiqueta tag : article.getListaEtiquetas()) {
@@ -145,13 +142,12 @@ public class PuenteArt {
             preparedStatement.setString(1, article.getTitulo());
             preparedStatement.setString(2, article.getCuerpo());
             preparedStatement.setLong(3, article.getAutor().getId());
-            preparedStatement.setDate(4, article.getFecha());
+            preparedStatement.setTimestamp(4, Timestamp.valueOf(article.getFecha()));
 
             int row = preparedStatement.executeUpdate() ;
             if(row>0)
                 ok=true;
 
-            ArrayList<Etiqueta> etiquetasUsadas = PuenteEtiqueta.getInstance().cargarEtiquetas();
             for (Etiqueta tag : article.getListaEtiquetas()) {
                 if(PuenteEtiqueta.getInstance().getEtiqueta(tag.getEtiqueta())==null){
                     long idEt = PuenteEtiqueta.getInstance().crearEtiqueta(tag);
@@ -161,7 +157,6 @@ public class PuenteArt {
                     tag.setId(et.getId());
                 }
             }
-
             for (Etiqueta tag : article.getListaEtiquetas()) {
                 PuenteArtEtiqueta.getInstance().crearEtiquetasArt(article.getId(), PuenteEtiqueta.getInstance().getEtiqueta(tag.getEtiqueta()).getId());
             }

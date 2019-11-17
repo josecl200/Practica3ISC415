@@ -1,7 +1,9 @@
 import clases.Articulo;
+import clases.Comentario;
 import clases.Etiqueta;
 import clases.Usuario;
 import puentedb.PuenteArt;
+import puentedb.PuenteComentario;
 import puentedb.PuenteUser;
 import spark.ModelAndView;
 import spark.Session;
@@ -9,6 +11,7 @@ import spark.Spark;
 import spark.template.freemarker.FreeMarkerEngine;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,28 +29,39 @@ public class Routes {
         Spark.get("/articulo/:idart", (request, response) -> {
             Map<String,Object> atributos = new HashMap<>();
             atributos.put("articulo", PuenteArt.getInstance().getArticulo(Long.parseLong(request.params("idArt"))));
-            atributos.put("usuario", request.session(true).attribute("usuario"));
+            atributos.put("usuario", request.session().attribute("usuario"));
             return new FreeMarkerEngine().render(new ModelAndView(atributos,"post.fml"));
         });
 
         Spark.get("/crearArticulo", (request, response) -> {
             Map<String,Object> atributos = new HashMap<>();
-            atributos.put("usuario", request.session(true).attribute("usuario"));
+            atributos.put("usuario", request.session().attribute("usuario"));
             return new FreeMarkerEngine().render(new ModelAndView(atributos,"create.fml"));
         });
 
         Spark.post("/crearArticulo", ((request, response) -> {
-            String[] tags = request.queryParams("etiquetas").split(",");
+            String[] tags = request.queryParams("tags").split(",");
+            System.out.println(tags);
+            System.out.println(request.queryParams());
             ArrayList<Etiqueta> etiquetas = new ArrayList<>();
             for (String tag: tags) {
-
                 Etiqueta etiq = new Etiqueta(0,tag.trim());
             }
-            Articulo art = new Articulo(0,request.queryParams("titulo"), request.queryParams("cuerpo"), PuenteUser.getInstance().getUser(Long.parseLong(request.session(true).attribute("id_usuario"))), new Date(new java.util.Date().getTime()), etiquetas);
+            Articulo art = new Articulo(0,request.queryParams("titulo"), request.queryParams("cuerpo"), request.session(true).attribute("usuario"), LocalDateTime.now(), etiquetas);
             long id = PuenteArt.getInstance().createArticulo(art);
-            response.redirect("/articulo"+ id);
+            response.redirect("/articulo/"+ id);
             return null;
         }));
+
+        Spark.post("/postearComentario", (request, response) -> {
+            System.out.println(request.queryParams("articuloId"));
+            long idArt = Long.parseLong(request.queryParams("articuloId"));
+            String comentario = request.queryParams("comment");
+            Comentario newComment = new Comentario(0,comentario,request.session().attribute("usuario"),idArt,LocalDateTime.now());
+            PuenteComentario.getInstance().crearComentario(newComment);
+            response.redirect("/articulo/"+ idArt);
+            return null;
+        });
 
         Spark.get("/login", (request, response) -> {
             return new FreeMarkerEngine().render(new ModelAndView(null,"login.fml"));
@@ -104,7 +118,6 @@ public class Routes {
                 atributos.put("mensaje", "algo salió mal, intentelo de nuevo");
                 return new FreeMarkerEngine().render(new ModelAndView(atributos,"login.fml"));
             }
-
         });
     }
 }

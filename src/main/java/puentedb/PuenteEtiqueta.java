@@ -52,7 +52,7 @@ public class PuenteEtiqueta {
         Connection con = null;
         try{
             con = PuenteDB.getInstance().getConnection();
-            String query = "SELECT * FROM Etiqueta where id_etiqueta = ?;";
+            String query = "SELECT * FROM Etiqueta where id = ?;";
             PreparedStatement etiqRes = con.prepareCall(query);
             etiqRes.setLong(1,id_etiqueta);
             ResultSet execQuery = etiqRes.executeQuery();

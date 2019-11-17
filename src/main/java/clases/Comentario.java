@@ -1,13 +1,14 @@
 package clases;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class Comentario {
     private long id;
     private String comentario;
     private Usuario autor;
-    private Articulo articulo;
-    private Date fecha;
+    private long articulo;
+    private LocalDateTime fecha;
 
 
 
@@ -15,7 +16,7 @@ public class Comentario {
 
     }
 
-    public Comentario(long id, String comentario, Usuario autor, Articulo articulo, Date fecha) {
+    public Comentario(long id, String comentario, Usuario autor, long articulo, LocalDateTime fecha) {
         this.id = id;
         this.comentario = comentario;
         this.autor = autor;
@@ -47,19 +48,19 @@ public class Comentario {
         this.autor = autor;
     }
 
-    public Articulo getArticulo() {
+    public long getArticulo() {
         return articulo;
     }
 
-    public void setArticulo(Articulo articulo) {
+    public void setArticulo(long articulo) {
         this.articulo = articulo;
     }
 
-    public Date getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 }

@@ -21,5 +21,12 @@ public class Filter {
                 response.redirect("/login");
             }
         });*/
+
+        Spark.before("/postearComentario", (request, response) -> {
+            Usuario user = request.session().attribute("usuario");
+            if(user == null){
+                response.redirect("/login");
+            }
+        });
     }
 }

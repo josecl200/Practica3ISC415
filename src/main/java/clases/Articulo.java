@@ -2,6 +2,7 @@ package clases;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Articulo {
@@ -9,7 +10,7 @@ public class Articulo {
     private String titulo;
     private String cuerpo;
     private Usuario autor;
-    private Date fecha;
+    private LocalDateTime fecha;
     private ArrayList<Comentario> listaComentarios;
     private ArrayList<Etiqueta> listaEtiquetas;
 
@@ -17,7 +18,7 @@ public class Articulo {
 
     }
 
-    public Articulo(long id, String titulo, String cuerpo, Usuario autor, Date fecha, ArrayList<Etiqueta> listaEtiquetas) {
+    public Articulo(long id, String titulo, String cuerpo, Usuario autor, LocalDateTime fecha, ArrayList<Etiqueta> listaEtiquetas) {
         this.id = id;
         this.titulo = titulo;
         this.cuerpo = cuerpo;
@@ -59,11 +60,11 @@ public class Articulo {
         this.autor = autor;
     }
 
-    public Date getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 

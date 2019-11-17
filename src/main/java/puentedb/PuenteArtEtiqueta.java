@@ -23,7 +23,7 @@ public class PuenteArtEtiqueta {
         ArrayList<Etiqueta> etiquetas = new ArrayList<>();
         Connection con = null;
         try{
-            String query = "select * from etiquetaart where id_articulo = ?";
+            String query = "select * from artetiqueta where id_articulo = ?";
             con = PuenteDB.getInstance().getConnection();
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setLong(1,idArt);

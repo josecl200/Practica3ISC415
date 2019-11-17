@@ -85,7 +85,7 @@
         <hr>
         <#list posts as post>
           <div class="post-preview">
-            <a href="/articulo/${post.id}">
+            <a href="/articulo/${post.id?string["0"]}">
               <h2 class="post-title">
                 ${post.titulo}
               </h2>
