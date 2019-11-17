@@ -51,7 +51,7 @@ public class PuenteArtEtiqueta {
         Connection con = null;
 
         try {
-            String query = "insert into etiquetaArt(id_articulo,id_etiqueta) values(?,?)";
+            String query = "insert into artetiqueta values(?,?)";
             con = PuenteDB.getInstance().getConnection();
             PreparedStatement preparedStatement = con.prepareStatement(query);
 

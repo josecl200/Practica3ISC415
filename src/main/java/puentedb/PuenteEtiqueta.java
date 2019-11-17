@@ -111,8 +111,8 @@ public class PuenteEtiqueta {
             long uniqueID = UUID.randomUUID().getLeastSignificantBits();
             execQuery.setLong(1,uniqueID);
             execQuery.setString(2, et.getEtiqueta());
-            ResultSet insertRes = execQuery.executeQuery();
-            if(insertRes.next()){
+            int insertRes = execQuery.executeUpdate();
+            if(insertRes > 0){
                 id = uniqueID;
             }
 
