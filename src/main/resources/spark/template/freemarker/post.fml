@@ -110,6 +110,13 @@
             </#if>
         </#if>
 
+            <p>
+                <#if articulolistaEtiquetas??>
+                    ${articulo.listaEtiquetas}
+                <#else>
+                    N/A
+                </#if>
+            </p>
     </div>
   </article>
 

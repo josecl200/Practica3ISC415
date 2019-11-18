@@ -108,7 +108,17 @@
               <#else>
                 el dia del ajrebatamiemto
               </#if>
+
             </p>
+
+            <p>
+              <#if post.articulolistaEtiquetas??>
+                ${post.articulo.listaEtiquetas}
+              <#else>
+                N/A
+              </#if>
+            </p>
+
           </div>
         <hr>
         </#list>
