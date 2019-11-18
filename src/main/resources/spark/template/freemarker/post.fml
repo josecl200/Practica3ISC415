@@ -111,8 +111,11 @@
         </#if>
 
             <p>
-                <#if articulolistaEtiquetas??>
-                    ${articulo.listaEtiquetas}
+                <#if articulo.listaEtiquetas??>
+                    tags:
+                    <#list articulo.listaEtiquetas as etiq>
+                        ${etiq.etiqueta},&nbsp;
+                    </#list>
                 <#else>
                     N/A
                 </#if>
