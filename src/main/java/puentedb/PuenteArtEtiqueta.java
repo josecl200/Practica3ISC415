@@ -74,7 +74,7 @@ public class PuenteArtEtiqueta {
         Connection con = null;
 
         try {
-            String query = "delete from etiquetaArt where id_articulo=?";
+            String query = "delete from artetiqueta where id_articulo=?";
             con = PuenteDB.getInstance().getConnection();
             PreparedStatement preparedStatement = con.prepareStatement(query);
 

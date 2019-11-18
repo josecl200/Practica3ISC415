@@ -96,14 +96,12 @@
         <#if usuario??>
             <#if usuario.isAdmin()?? || (usuario.isAuthor() && usuario.id == articulo.autor.id)>
                 <p class="form-delete">
-                <form name="delete" id="delete" method="POST" action="/modArticulo/${articulo.id}??string['0']" style="all:unset;">
-                    <a class=form-delete" onclick="document.getElementById('delete').submit();">Borrar Post</a>
-                </form>
+                    <a class=form-delete" href="/modArticulo/${articulo.id?string["0"]}">Editar Post</a>
                 </p>
 
                 <p class="form-update">
-                <form name="update" id="update" method="POST" action="/delArticulo/${articulo.id}??string['0']" style="all:unset;">
-                    <a class=form-update" onclick="document.getElementById('update').submit();">Editar Post</a>
+                <form name="update" id="update" method="POST" action="/delArticulo/${articulo.id?string["0"]}" style="all:unset;">
+                    <a class=form-update" onclick="document.getElementById('update').submit();">Borrar Post</a>
                 </form>
                 </p>
 
@@ -150,7 +148,7 @@
                           <#if usuario??>
                               <#if usuario.isAdmin()?? || (usuario.isAuthor() && usuario.id == articulo.autor.id)>
                                   <p class="form-delete">
-                                  <form name="delete" id="delete" method="POST" action="/delComentario/${artCom.id}" style="all:unset;">
+                                  <form name="delete" id="delete" method="POST" action="/delComentario/${artCom.id?string["0"]}" style="all:unset;">
                                       <a class=form-delete" onclick="document.getElementById('delete').submit();">Borrar comentario</a>
                                   </form>
                                   </p>

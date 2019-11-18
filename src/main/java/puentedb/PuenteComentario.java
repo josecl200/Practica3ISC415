@@ -22,7 +22,7 @@ public class PuenteComentario {
         ArrayList<Comentario> comments = new ArrayList<>();
         Connection con=null;
         try{
-            String query = "SELECT * FROM COMENTARIO WHERE ARTICULO = ? ORDER BY fecha";
+            String query = "SELECT * FROM COMENTARIO WHERE ARTICULO = ? ORDER BY fecha DESC";
             con = PuenteDB.getInstance().getConnection();
             PreparedStatement execQuery = con.prepareCall(query);
             execQuery.setLong(1,id_articulo);

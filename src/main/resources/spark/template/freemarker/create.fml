@@ -69,7 +69,11 @@
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="site-heading">
-                    <h2>Publicar post</h2>
+                    <#if idMod??>
+                        <h2>Modificar post</h2>
+                    <#else>
+                        <h2>Publicar post</h2>
+                    </#if>
                     <span class="subheading">Inserte el contenido</span>
                 </div>
             </div>
@@ -84,9 +88,18 @@
 
 
 			<div id="crear" class="crear-articulo">
-				<h3 id="title" class="title">Crear publicacion
-				</h3>
-				<form action="/crearArticulo" method="post" id="commentform" class="comment-form" novalidate>
+				<#if idMod??>
+                    <h3 id="title" class="title">Modificar publicacion
+                    </h3>
+                    <#else>
+                        <h3 id="title" class="title">Crear publicacion
+                        </h3>
+				</#if>
+			<#if idMod??>
+                <form action="/modArticulo/${idMod?string["0"]}" method="post" id="commentform" class="comment-form" novalidate>
+            <#else>
+                <form action="/crearArticulo" method="post" id="commentform" class="comment-form" novalidate>
+			</#if>
 
 					<p class="comment-notes">
 						Entradas requeridas se marcan con
@@ -97,19 +110,32 @@
 						<label for="author">Titulo
 							<span class="required">*</span>
 						</label>
-						<input id="titulo" name="titulo" type="text" value="" size="30" maxlength="245" required='required' />
+                        <#if isMod??>
+                            <input id="titulo" name="titulo" type="text" value=${titulo} size="30" maxlength="245" required='required'  />
+                        <#else>
+                            <input id="titulo" name="titulo" type="text"  size="30" maxlength="245" required='required'/>
+
+                        </#if>
 					</p>
 
 					<p class="comment-form-comment">
-						<label for="cuerpo">Contenido</label>
-						<textarea id="cuerpo" name="cuerpo" cols="45" rows="8" maxlength="65525" required="required"></textarea>
+						<label for="cuerpo">Contenido </label>
+                        <#if idMod??>
+                            <textarea id="cuerpo" name="cuerpo" cols="45" rows="8" maxlength="65525" required="required">${cuerpo}</textarea>
+                        <#else><textarea id="cuerpo" name="cuerpo" cols="45" rows="8" maxlength="65525" required="required"></textarea>
+
+                        </#if>
 					</p>
 
 					<p class="comment-form-author">
 						<label for="author">Tags
 							<span class="required">*</span>
 						</label>
-						<input id="tags" name="tags" type="text" value="" size="30" maxlength="245" required='required' />
+						<#if idMod??>
+                            <input id="tags" name="tags" type="text" value=${tags} size="30" maxlength="245" required='required' />
+                            <#else>
+                            <input id="tags" name="tags" type="text" size="30" maxlength="245" required='required' />
+						</#if>
 					</p>
 
 					<p class="comment-form-author">
@@ -119,7 +145,11 @@
 					</p>
 
 					<p class="form-submit">
-						<input name="submit" type="submit" id="submit" class="submit" value="Publicar" />
+                        <#if idMod??>
+                            <input name="submit" type="submit" id="submit" class="submit" value="Modificar"/>
+                        <#else>
+                            <input name="submit" type="submit" id="submit" class="submit" value="Publicar" />
+                        </#if>
 						<input type='hidden' name='comment_post_ID' value='1' id='comment_post_ID' />
 						<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
 					</p>

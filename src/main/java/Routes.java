@@ -2,10 +2,7 @@ import clases.Articulo;
 import clases.Comentario;
 import clases.Etiqueta;
 import clases.Usuario;
-import puentedb.PuenteArt;
-import puentedb.PuenteComentario;
-import puentedb.PuenteEtiqueta;
-import puentedb.PuenteUser;
+import puentedb.*;
 import spark.ModelAndView;
 import spark.Session;
 import spark.Spark;
@@ -15,6 +12,7 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Routes {
@@ -41,11 +39,20 @@ public class Routes {
         });
 
         Spark.get("/modArticulo/:idArt", (request, response) -> {
+
+
             Map<String,Object> atributos = new HashMap<>();
+            List tagList = new ArrayList<>();
             Articulo toMod = PuenteArt.getInstance().getArticulo(Long.parseLong(request.params("idArt")));
-            atributos.put("titulo", toMod.getTitulo());
-            atributos.put("cuerpo", toMod.getCuerpo());
-            atributos.put("idMod", toMod.getId());
+            ArrayList<Etiqueta> etiqs = toMod.getListaEtiquetas();
+            for (Etiqueta e:etiqs) {
+                tagList.add(e.getEtiqueta());
+            }
+            String tagString = String.join(",",tagList);
+            atributos.put("titulo",  toMod.getTitulo());
+            atributos.put("cuerpo",  toMod.getCuerpo());
+            atributos.put("tags",    tagString);
+            atributos.put("idMod",   toMod.getId());
             atributos.put("usuario", request.session().attribute("usuario"));
             return new FreeMarkerEngine().render(new ModelAndView(atributos,"create.fml"));
         });
@@ -60,7 +67,9 @@ public class Routes {
                 if(PuenteEtiqueta.getInstance().getEtiqueta(tag)!=null){
                     etiquetas.add(PuenteEtiqueta.getInstance().getEtiqueta(tag));
                 }else{
-                    PuenteEtiqueta.getInstance().crearEtiqueta(new Etiqueta(0,tag));
+                    long newEt = PuenteEtiqueta.getInstance().crearEtiqueta(new Etiqueta(0,tag));
+
+                    etiquetas.add(PuenteEtiqueta.getInstance().getEtiqueta(newEt));
                 }
             }
             Articulo art = new Articulo(Long.parseLong(request.params("idArt")),request.queryParams("titulo"), request.queryParams("cuerpo"), request.session(true).attribute("usuario"), LocalDateTime.now(), etiquetas);
@@ -100,6 +109,22 @@ public class Routes {
             Comentario newComment = new Comentario(0,comentario,request.session().attribute("usuario"),idArt,LocalDateTime.now());
             PuenteComentario.getInstance().crearComentario(newComment);
             response.redirect("/articulo/"+ idArt);
+            return null;
+        });
+
+        Spark.post("/delArticulo/:idArt", (request, response) -> {
+            long idArt = Long.parseLong(request.params("idArt"));
+            PuenteArtEtiqueta.getInstance().borrarEtiquetaArt(idArt);
+            PuenteArt.getInstance().deleteArticulo(idArt);
+            response.redirect("/");
+            return null;
+        });
+
+        Spark.post("/delComentario/:idComment",(request, response) -> {
+            long idComment = Long.parseLong(request.params("idComment"));
+            long idArt = PuenteComentario.getInstance().getComentario(idComment).getArticulo();
+            PuenteComentario.getInstance().deleteComentario(idComment);
+            response.redirect("/articulo/"+idArt);
             return null;
         });
 

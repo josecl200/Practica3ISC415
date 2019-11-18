@@ -125,7 +125,7 @@ public class PuenteArt {
         boolean ok = false;
         Connection con = null;
         try {
-            String query = "UPDATE articulo SET (title,body,author_id,article_date) values(?,?,?,?) WHERE ID = ?";
+            String query = "UPDATE articulo SET titulo=?,cuerpo=?,autor=?,fecha=? WHERE ID = ?";
             con = PuenteDB.getInstance().getConnection();
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setLong(5, article.getId());
@@ -137,18 +137,9 @@ public class PuenteArt {
             int row = preparedStatement.executeUpdate() ;
             if(row>0)
                 ok=true;
-
+            PuenteArtEtiqueta.getInstance().borrarEtiquetaArt(article.getId());
             for (Etiqueta tag : article.getListaEtiquetas()) {
-                if(PuenteEtiqueta.getInstance().getEtiqueta(tag.getEtiqueta())==null){
-                    long idEt = PuenteEtiqueta.getInstance().crearEtiqueta(tag);
-                    tag.setId(idEt);
-                }else{
-                    Etiqueta et = PuenteEtiqueta.getInstance().getEtiqueta(tag.getEtiqueta());
-                    tag.setId(et.getId());
-                }
-            }
-            for (Etiqueta tag : article.getListaEtiquetas()) {
-                PuenteArtEtiqueta.getInstance().crearEtiquetasArt(article.getId(), PuenteEtiqueta.getInstance().getEtiqueta(tag.getEtiqueta()).getId());
+                PuenteArtEtiqueta.getInstance().crearEtiquetasArt(article.getId(), tag.getId());
             }
 
         } catch (SQLException e) {
@@ -177,8 +168,7 @@ public class PuenteArt {
             int row = preparedStatement.executeUpdate();
             if (row>0)
                 ok=true;
-
-
+            PuenteArtEtiqueta.getInstance().borrarEtiquetaArt(id_art);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

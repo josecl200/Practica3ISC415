@@ -90,7 +90,11 @@
                 ${post.titulo}
               </h2>
               <h3 class="post-subtitle">
-                ${post.cuerpo?substring(0,70)}
+                <#if post.cuerpo?length &gt; 70>
+                    ${post.cuerpo?substring(0,70)}...
+                <#else>
+                    ${post.cuerpo}
+                </#if>
               </h3>
             </a>
             <p class="post-meta">Posteado por
