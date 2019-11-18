@@ -3,6 +3,9 @@ package puentedb;
 import clases.Usuario;
 import org.h2.tools.Server;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,14 +20,14 @@ public class Bootstrap{
         Server.shutdownTcpServer("tcp://localhost:9094", "contracts", true, true);
     }
 
-    public static void createTables() throws SQLException {
+    public static void createTables() throws SQLException, NoSuchAlgorithmException {
         System.out.println("Creating tables...");
         String UsuarioDB = "CREATE TABLE IF NOT EXISTS USUARIO" +
                 "(" +
                 "ID BIGINT PRIMARY KEY NOT NULL," +
                 "USERNAME VARCHAR(30) UNIQUE," +
                 "NOMBRE VARCHAR(30)," +
-                "PASSWORD VARCHAR(30)," +
+                "PASSWORD TINYBLOB," +
                 "ADMINISTRATOR BOOLEAN," +
                 "AUTOR BOOLEAN," +
                 "UNIQUE KEY USERNAME_UNIQUE(USERNAME)" +
@@ -38,7 +41,7 @@ public class Bootstrap{
         String ArticuloDB = "CREATE TABLE IF NOT EXISTS ARTICULO" +
                 "(" +
                 "ID BIGINT PRIMARY KEY NOT NULL," +
-                "TITULO VARCHAR(30) NOT NULL," +
+                "TITULO VARCHAR(100) NOT NULL," +
                 "CUERPO VARCHAR2 NOT NULL," +
                 "AUTOR BIGINT NOT NULL REFERENCES USUARIO(ID)," +
                 "FECHA TIMESTAMP NOT NULL" +
@@ -68,8 +71,9 @@ public class Bootstrap{
         statement.execute(ComentarioDB);
         statement.execute(EtiqArtDB);
         statement.close();
-
-        if(PuenteUser.getInstance().crearUsuario(new Usuario(0,"root","admin","toor",true,true))){
+        MessageDigest md   = MessageDigest.getInstance("SHA-224");
+        byte[] hashPassEnt = md.digest("toor".getBytes(StandardCharsets.UTF_8));
+        if(PuenteUser.getInstance().crearUsuario(new Usuario(0,"root","admin",hashPassEnt,true,true))){
             System.out.println("Tables created!!");
         }else{
             System.out.println("DB ERROR");

@@ -112,7 +112,7 @@
             </p>
 
             <p>
-              <#if post.listaEtiquetas?size &gt; >
+              <#if post.listaEtiquetas?size &gt; 0>
                   Tags:
                       <#list post.listaEtiquetas as etiq>
                           ${etiq.etiqueta},&nbsp;

@@ -2,11 +2,15 @@ package puentedb;
 
 import clases.Usuario;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class PuenteUser {
@@ -33,7 +37,7 @@ public class PuenteUser {
             preparedStatement.setLong(1, uniqueID);
             preparedStatement.setString(2, usuario.getUsername());
             preparedStatement.setString(3, usuario.getNombre());
-            preparedStatement.setString(4, usuario.getPassword());
+            preparedStatement.setBytes(4, usuario.getPassword());
             preparedStatement.setBoolean(5, usuario.isAdmin());
             preparedStatement.setBoolean(6,usuario.isAutor());
 
@@ -94,7 +98,7 @@ public class PuenteUser {
                 user.setId(rs.getLong("id"));
                 user.setUsername(rs.getString("username"));
                 user.setNombre(rs.getString("nombre"));
-                user.setPassword(rs.getString("password"));
+                user.setPassword(rs.getBytes("password"));
                 user.setAdmin(rs.getBoolean("admin"));
                 user.setAutor(rs.getBoolean("autor"));
             }
@@ -129,7 +133,7 @@ public class PuenteUser {
                 user.setId(rs.getLong("id"));
                 user.setUsername(rs.getString("username"));
                 user.setNombre(rs.getString("nombre"));
-                user.setPassword(rs.getString("password"));
+                user.setPassword(rs.getBytes("password"));
                 user.setAdmin(rs.getBoolean("admin"));
                 user.setAutor(rs.getBoolean("autor"));
             }
@@ -146,23 +150,26 @@ public class PuenteUser {
         return user;
     }
 
-    public boolean validateCredentials(String username, String password){
-        boolean login   = false;
-        Connection con  = null;
+    public boolean validateCredentials(String username, String password) throws NoSuchAlgorithmException {
+        boolean login      = false;
+        Connection con     = null;
+        MessageDigest md   = MessageDigest.getInstance("SHA-224");
+        byte[] hashPassEnt = md.digest(password.getBytes(StandardCharsets.UTF_8));
 
         try {
-            String query = "select * from usuario where username = ? and password = ?";
+            String query = "select * from usuario where username = ?";
             con = PuenteDB.getInstance().getConnection();
 
             PreparedStatement preparedStatement = con.prepareStatement(query);
 
             preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
 
             ResultSet rs = preparedStatement.executeQuery();
-            if(rs.next()){
-                login=true;
-            }
+            if(rs.next())
+                if(Arrays.equals(rs.getBytes("password"), hashPassEnt))
+                    login=true;
+
+
 
         } catch (SQLException ex) {
 

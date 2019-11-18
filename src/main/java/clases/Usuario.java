@@ -4,7 +4,7 @@ public class Usuario {
     private long id;
     private String username;
     private String nombre;
-    private String password;
+    private byte[] password;
     private boolean admin;
     private boolean autor;
 
@@ -12,7 +12,7 @@ public class Usuario {
 
     }
 
-    public Usuario(long id, String username, String nombre, String password, boolean admin, boolean autor) {
+    public Usuario(long id, String username, String nombre, byte[] password, boolean admin, boolean autor) {
         this.id = id;
         this.username = username;
         this.nombre = nombre;
@@ -45,11 +45,11 @@ public class Usuario {
         this.nombre = nombre;
     }
 
-    public String getPassword() {
+    public byte[] getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(byte[] password) {
         this.password = password;
     }
 

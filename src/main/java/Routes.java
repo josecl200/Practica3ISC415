@@ -8,6 +8,8 @@ import spark.Session;
 import spark.Spark;
 import spark.template.freemarker.FreeMarkerEngine;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ public class Routes {
     public static void rutas(){
         Spark.get("/", (request, response) -> {
             Map<String,Object> atributos = new HashMap<>();
-            System.out.println(PuenteArt.getInstance().cargarArticulos().get(0).getAutor().getId());
+            //System.out.println(PuenteArt.getInstance().cargarArticulos().get(0).getAutor().getId());
             atributos.put("posts", PuenteArt.getInstance().cargarArticulos());
             atributos.put("usuario", request.session(true).attribute("usuario"));
             return new FreeMarkerEngine().render(new ModelAndView(atributos,"index.fml"));
@@ -173,7 +175,9 @@ public class Routes {
             String nombre   = request.queryParams("nombre");
             boolean admin = false;
             boolean autor = request.queryParams("autor") != null;
-            Usuario newUser = new Usuario(0,username, nombre, password,admin,autor);
+            MessageDigest md   = MessageDigest.getInstance("SHA-224");
+            byte[] hashPassEnt = md.digest(password.getBytes(StandardCharsets.UTF_8));
+            Usuario newUser = new Usuario(0,username, nombre, hashPassEnt,admin,autor);
             if(PuenteUser.getInstance().crearUsuario(newUser)){
                 Map<String,Object> atributos = new HashMap<>();
                 atributos.put("mensaje", "Registrado con exito, proceda a autenticarse");
