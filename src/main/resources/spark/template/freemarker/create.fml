@@ -110,8 +110,8 @@
 						<label for="author">Titulo
 							<span class="required">*</span>
 						</label>
-                        <#if isMod??>
-                            <input id="titulo" name="titulo" type="text" value=${titulo} size="30" maxlength="245" required='required'  />
+                        <#if idMod??>
+                            <input id="titulo" name="titulo" type="text" value='${tetel}' size="30" maxlength="245" required='required'  />
                         <#else>
                             <input id="titulo" name="titulo" type="text"  size="30" maxlength="245" required='required'/>
 
@@ -132,7 +132,7 @@
 							<span class="required">*</span>
 						</label>
 						<#if idMod??>
-                            <input id="tags" name="tags" type="text" value=${tags} size="30" maxlength="245" required='required' />
+                            <input id="tags" name="tags" type="text" value='${tags}' size="30" maxlength="245" required='required' />
                             <#else>
                             <input id="tags" name="tags" type="text" size="30" maxlength="245" required='required' />
 						</#if>

@@ -49,7 +49,7 @@ public class Routes {
                 tagList.add(e.getEtiqueta());
             }
             String tagString = String.join(",",tagList);
-            atributos.put("titulo",  toMod.getTitulo());
+            atributos.put("tetel",   toMod.getTitulo());
             atributos.put("cuerpo",  toMod.getCuerpo());
             atributos.put("tags",    tagString);
             atributos.put("idMod",   toMod.getId());
