@@ -78,25 +78,6 @@
               on ${articulo.fecha}</span>
           </#if>
 
-              <#if usuario??>
-                  <#if usuario.isAdmin()?? || (usuario.isAuthor() && usuario.id == articulo.autor.id)>
-                      <p class="form-delete">
-                      <form name="delete" id="delete" method="POST" action="/modArticulo/${articulo.id}??string['0']" style="all:unset;">
-                          <a class=form-delete" onclick="document.getElementById('delete').submit();">Borrar Post</a>
-                      </form>
-                      </p>
-
-                      <p class="form-update">
-                      <form name="update" id="update" method="POST" action="/delArticulo/${articulo.id}??string['0']" style="all:unset;">
-                          <a class=form-update" onclick="document.getElementById('update').submit();">Editar Post</a>
-                      </form>
-                      </p>
-
-                  <#else>
-                      <!--delete bug!-->
-                  </#if>
-              </#if>
-
           </div>
         </div>
       </div>
@@ -111,6 +92,26 @@
           <p>${articulo.cuerpo}</p>
         </div>
       </div>
+
+        <#if usuario??>
+            <#if usuario.isAdmin()?? || (usuario.isAuthor() && usuario.id == articulo.autor.id)>
+                <p class="form-delete">
+                <form name="delete" id="delete" method="POST" action="/modArticulo/${articulo.id}??string['0']" style="all:unset;">
+                    <a class=form-delete" onclick="document.getElementById('delete').submit();">Borrar Post</a>
+                </form>
+                </p>
+
+                <p class="form-update">
+                <form name="update" id="update" method="POST" action="/delArticulo/${articulo.id}??string['0']" style="all:unset;">
+                    <a class=form-update" onclick="document.getElementById('update').submit();">Editar Post</a>
+                </form>
+                </p>
+
+            <#else>
+                <!--delete bug!-->
+            </#if>
+        </#if>
+
     </div>
   </article>
 
@@ -149,7 +150,7 @@
                           <#if usuario??>
                               <#if usuario.isAdmin()?? || (usuario.isAuthor() && usuario.id == articulo.autor.id)>
                                   <p class="form-delete">
-                                  <form name="delete" id="delete" method="POST" action="/deleteComentario/${artCom.id}" style="all:unset;">
+                                  <form name="delete" id="delete" method="POST" action="/delComentario/${artCom.id}" style="all:unset;">
                                       <a class=form-delete" onclick="document.getElementById('delete').submit();">Borrar comentario</a>
                                   </form>
                                   </p>
