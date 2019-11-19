@@ -26,23 +26,18 @@ public class Routes {
             atributos.put("usuario", request.session(true).attribute("usuario"));
             return new FreeMarkerEngine().render(new ModelAndView(atributos,"index.fml"));
         });
-
         Spark.get("/articulo/:idart", (request, response) -> {
             Map<String,Object> atributos = new HashMap<>();
             atributos.put("articulo", PuenteArt.getInstance().getArticulo(Long.parseLong(request.params("idArt"))));
             atributos.put("usuario", request.session().attribute("usuario"));
             return new FreeMarkerEngine().render(new ModelAndView(atributos,"post.fml"));
         });
-
         Spark.get("/crearArticulo", (request, response) -> {
             Map<String,Object> atributos = new HashMap<>();
             atributos.put("usuario", request.session().attribute("usuario"));
             return new FreeMarkerEngine().render(new ModelAndView(atributos,"create.fml"));
         });
-
         Spark.get("/modArticulo/:idArt", (request, response) -> {
-
-
             Map<String,Object> atributos = new HashMap<>();
             List tagList = new ArrayList<>();
             Articulo toMod = PuenteArt.getInstance().getArticulo(Long.parseLong(request.params("idArt")));
@@ -55,10 +50,9 @@ public class Routes {
             atributos.put("cuerpo",  toMod.getCuerpo());
             atributos.put("tags",    tagString);
             atributos.put("idMod",   toMod.getId());
-            atributos.put("usuario", request.session().attribute("usuario"));
+            atributos.put("usuario", toMod.getAutor());
             return new FreeMarkerEngine().render(new ModelAndView(atributos,"create.fml"));
         });
-
         Spark.post("/modArticulo/:idArt", ((request, response) -> {
             String[] tags = request.queryParams("tags").split(",");
             System.out.println(request.queryParams("tags"));
@@ -74,14 +68,12 @@ public class Routes {
                     etiquetas.add(PuenteEtiqueta.getInstance().getEtiqueta(newEt));
                 }
             }
-            Articulo art = new Articulo(Long.parseLong(request.params("idArt")),request.queryParams("titulo"), request.queryParams("cuerpo"), request.session(true).attribute("usuario"), LocalDateTime.now(), etiquetas);
+            Articulo art = new Articulo(Long.parseLong(request.params("idArt")),request.queryParams("titulo"), request.queryParams("cuerpo"), PuenteArt.getInstance().getArticulo(Long.parseLong(request.params("idArt"))).getAutor(), LocalDateTime.now(), etiquetas);
             PuenteArt.getInstance().modifyArticulo(art);
             response.redirect("/articulo/"+ request.params("idArt"));
             return null;
         }));
-
         Spark.post("/crearArticulo", ((request, response) -> {
-
             String[] tags = request.queryParams("tags").split(",");
             System.out.println(request.queryParams("tags"));
             System.out.println(tags);
@@ -96,14 +88,12 @@ public class Routes {
                    etiquetas.add(PuenteEtiqueta.getInstance().getEtiqueta(newEt));
                }
             }
-
             etiquetas.forEach(part -> System.out.println(part.getEtiqueta()));
             Articulo art = new Articulo(0,request.queryParams("titulo"), request.queryParams("cuerpo"), request.session().attribute("usuario"), LocalDateTime.now(), etiquetas);
             long id = PuenteArt.getInstance().createArticulo(art);
             response.redirect("/articulo/"+ id);
             return null;
         }));
-
         Spark.post("/postearComentario", (request, response) -> {
             System.out.println(request.queryParams("articuloId"));
             long idArt = Long.parseLong(request.queryParams("articuloId"));
@@ -113,7 +103,6 @@ public class Routes {
             response.redirect("/articulo/"+ idArt);
             return null;
         });
-
         Spark.post("/delArticulo/:idArt", (request, response) -> {
             long idArt = Long.parseLong(request.params("idArt"));
             PuenteArtEtiqueta.getInstance().borrarEtiquetaArt(idArt);
@@ -121,7 +110,6 @@ public class Routes {
             response.redirect("/");
             return null;
         });
-
         Spark.post("/delComentario/:idComment",(request, response) -> {
             long idComment = Long.parseLong(request.params("idComment"));
             long idArt = PuenteComentario.getInstance().getComentario(idComment).getArticulo();
@@ -129,11 +117,9 @@ public class Routes {
             response.redirect("/articulo/"+idArt);
             return null;
         });
-
         Spark.get("/login", (request, response) -> {
             return new FreeMarkerEngine().render(new ModelAndView(null,"login.fml"));
         });
-
         Spark.post("/logout", (request, response) -> {
             Session session = request.session(true);
             session.invalidate();
@@ -141,7 +127,6 @@ public class Routes {
             response.redirect("/");
             return null;
         });
-
         Spark.post("/login",(request, response) -> {
             String username = request.queryParams("usuario");
             String password = request.queryParams("contrasena");
@@ -168,7 +153,6 @@ public class Routes {
             Map<String,Object> atributos = new HashMap<>();
             return new FreeMarkerEngine().render(new ModelAndView(atributos,"register.fml"));
         });
-
         Spark.post("/register", (request, response) -> {
             String username = request.queryParams("usuario");
             String password = request.queryParams("contrasena");

@@ -14,14 +14,12 @@ public class Filter {
                 session.attribute("usuario", user);
             }
         });
-
-        /*Spark.before("/crearArticulo", (request, response) -> {
+        Spark.before("/crearArticulo", (request, response) -> {
             Usuario user = request.session().attribute("usuario");
-            if(user == null || !user.isAutor()){
+            if(user == null){
                 response.redirect("/login");
             }
-        });*/
-
+        });
         Spark.before("/postearComentario", (request, response) -> {
             Usuario user = request.session().attribute("usuario");
             if(user == null){
