@@ -23,7 +23,7 @@ public class Routes {
             Map<String,Object> atributos = new HashMap<>();
             //System.out.println(PuenteArt.getInstance().cargarArticulos().get(0).getAutor().getId());
             atributos.put("posts", PuenteArt.getInstance().cargarArticulos());
-            atributos.put("usuario", request.session(true).attribute("usuario"));
+            atributos.put("usuario", request.session().attribute("usuario"));
             return new FreeMarkerEngine().render(new ModelAndView(atributos,"index.fml"));
         });
         Spark.get("/articulo/:idart", (request, response) -> {

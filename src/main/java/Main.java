@@ -12,7 +12,8 @@ public class Main {
         Bootstrap.startDb();
         Bootstrap.createTables();
         PuenteDB.getInstance().testConnection();
-        Filter.applyFilters();
         Routes.rutas();
+        Filter.applyFilters();
+
     }
 }

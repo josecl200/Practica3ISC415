@@ -99,8 +99,8 @@ public class PuenteUser {
                 user.setUsername(rs.getString("username"));
                 user.setNombre(rs.getString("nombre"));
                 user.setPassword(rs.getBytes("password"));
-                user.setAdmin(rs.getBoolean("admin"));
-                user.setAutor(rs.getBoolean("autor"));
+                user.setAdmin(rs.getBoolean("ADMINISTRATOR"));
+                user.setAutor(rs.getBoolean("AUTOR"));
             }
 
         } catch (SQLException ex) {
